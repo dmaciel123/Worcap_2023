@@ -106,7 +106,7 @@ names(rf.tss.pred) = c("Random Forest")
 
 colr <- colorRampPalette(rev(brewer.pal(11, 'RdBu')))
 
-rf.tss.pred[rf.tss.pred > 200] = NA
+rf.tss.pred[rf.tss.pred > 500] = NA
 
 levelplot(raster::stack(rf.tss.pred),col.regions = viridis::viridis, maxpixels = 1e6, 
           main = "Total Suspended Sediments (TSS) Concentration - mg/L", 

@@ -15,10 +15,6 @@ O fluxo de processamento é dividido em três etapas:
 
 1. Um modelo de Random Forest para estimar Sedimentos em Suspensão (TSS)
 2. Uma predição para a concentração de TSS em uma data específica
-3. Série temporal de TSS usando o serviço WTSS
-
-
-![Figure 01](https://github.com/dmaciel123/HackingLimnology_RS_day/blob/main/animation.gif)
 
 # Software requerido
 

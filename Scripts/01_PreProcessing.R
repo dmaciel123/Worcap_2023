@@ -1,4 +1,4 @@
-## Pre-processing of GLORIA data to predict Chl-a and TSS ####
+## Pre-processing of GLORIA data to predict and TSS ####
 
 # loading require packages
 
@@ -83,8 +83,7 @@ OLI_sim = oli_simulation(spectra = spectra_formated,
                          point_name = rrs$GLORIA_ID)
 
 
-#It simulates for Sentinel-2A and Sentinel-2B and gives the results in a list.
-# Let's select only Sentinel-2A.
+#It simulates for Landsat-8/OLI and gives the results in a list.
 
 OLI = OLI_sim[,-1] %>% t() %>% data.frame()
 
@@ -153,6 +152,7 @@ summary(merged)
 
 chart.Correlation(log(select(merged, -contains(c("GLORIA_ID", 'Latitude', 'Longitude')))))
 
+# Vectorize
 
 vector = vect(merged, 
               geom = c('Longitude', 'Latitude'), 

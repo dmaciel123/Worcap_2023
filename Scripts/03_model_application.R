@@ -29,9 +29,9 @@ require(terrainr)
 
 stac_obj <- stac('https://planetarycomputer.microsoft.com/api/stac/v1/')
 
-
 dates = c("2021-01-01/2021-12-31")
-CLOUD_COVER = 20
+
+CLOUD_COVER = 2
 
 BBOX = c(-51.38, -30.38, -51.03, -29.97 ) #xmin, ymin, xmax, ymax
 
@@ -42,15 +42,16 @@ it_obj <- stac_obj %>%
   get_request() %>% 
   items_filter(`eo:cloud_cover` < as.numeric(CLOUD_COVER)) %>%
   items_filter(`platform` == 'landsat-8') %>%
-  
   items_sign(sign_fn = sign_planetary_computer())
 
 
 print(it_obj)
 
 
-crop_pt = ext(460000, 510000, -3450000, -3310000) 
+# Extent to crop
+crop_pt = ext(460000, 510000, -3400000, -3310000) 
 
+# Carregando as bandas
 
 blue <- paste0("/vsicurl/", it_obj$features[[1]]$assets$blue$href) %>% rast() %>% terra::crop(crop_pt)
 green <- paste0("/vsicurl/", it_obj$features[[1]]$assets$green$href) %>% rast() %>% terra::crop(crop_pt)
@@ -59,6 +60,7 @@ nir <- paste0("/vsicurl/", it_obj$features[[1]]$assets$nir08$href) %>% rast() %>
 swir <- paste0("/vsicurl/", it_obj$features[[1]]$assets$swir22$href) %>% rast() %>% terra::crop(crop_pt)
 coastal <- paste0("/vsicurl/", it_obj$features[[1]]$assets$coastal$href) %>% rast() %>% terra::crop(crop_pt)
 
+# Stack das imagens
 img.full = c(coastal,blue, green, red, nir) 
 
 plotRGB(img.full, r = 4, g = 3, b = 2, stretch = 'lin')
@@ -75,8 +77,7 @@ plotRGB(img.agua, r = 4, g = 3, b = 2, stretch = 'lin')
 
 # Reprojecting nir/swir to match the 20m spatial res
 
-
-# Glitn correction
+# Glint correction correction
 
 img.agua = img.agua-swir
 
@@ -112,7 +113,7 @@ levelplot(raster::stack(rf.tss.pred),col.regions = viridis::viridis, maxpixels =
           main = "Total Suspended Sediments (TSS) Concentration - mg/L", 
           colorkey=list(
             space='bottom',                   # plot legend at bottom
-            labels=list(at=seq(from = 0, to = 200, by = 20), font=4)      # legend ticks and labels 
+            labels=list(at=seq(from = 0, to = 500, by = 20), font=4)      # legend ticks and labels 
           )) 
 
 
